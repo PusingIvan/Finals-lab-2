@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLHttpRequest Lab</title>
+</head>
+<body>
+    <h2>Exploring XMLHttpRequest</h2>
+
+    <!-- Button the user clicks to start the request -->
+    <button id="loadData">Load Post Data</button>
+
+    <!-- The result (or error message) will be shown here -->
+    <div id="output" style="margin-top: 20px; border: 1px solid #ddd; padding: 10px;"></div>
+
+    <script>
+        // Step 1: Get the button and the output box from the page
+        const button = document.getElementById("loadData");
+        const output = document.getElementById("output");
+
+        // Step 2: Run this code when the button is clicked
+        button.addEventListener("click", function () {
+
+            // Show a message while we wait for the server
+            output.innerHTML = "Loading...";
+
+            // Step 3: Create a new XMLHttpRequest object
+            const xhr = new XMLHttpRequest();
+
+            // Step 4: Prepare the request
+            // "GET"  = we want to get data
+            // URL    = where the data lives
+            // true   = make it asynchronous (the page won't freeze)
+            xhr.open("GET", "https://jsonplaceholder.typicode.com/posts/1", true);
+
+            // Step 5: Decide what to do when the response comes back
+            xhr.onreadystatechange = function () {
+
+                // readyState 4 means "the request is finished"
+                if (xhr.readyState === 4) {
+
+                    // status 200 means "OK, success!"
+                    if (xhr.status === 200) {
+                        // Convert the text from the server into a JavaScript object
+                        const data = JSON.parse(xhr.responseText);
+
+                        // Show the title and body inside the output div
+                        output.innerHTML =
+                            "<strong>Post Title:</strong> " + data.title + "<br><br>" +
+                            "<strong>Content:</strong> " + data.body;
+                    } else if (xhr.status !== 0) {
+                        // The server replied, but not with 200 (example: 404 Not Found)
+                        output.innerHTML =
+                            '<span style="color:red;">Error: ' + xhr.status + " - " + xhr.statusText + "</span>";
+                    }
+                    // If status is 0, the request never reached the server.
+                    // That case is handled by xhr.onerror below.
+                }
+            };
+
+            // Step 6: Handle network problems (no internet, blocked request, etc.)
+            xhr.onerror = function () {
+                output.innerHTML =
+                    '<span style="color:red;">Error: Network problem. Please check your internet connection.</span>';
+            };
+
+            // Step 7: Send the request!
+            xhr.send();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+1. Difference between readyState and status?
+
+   readyState = PROGRESS of the request (0–4, ends at 4 = DONE).
+   status     = HTTP RESPONSE code from server (200 = OK, 404 = Not Found).
+
+
+2. How to make the request asynchronous?
+
+   Pass true as the third argument:  xhr.open("GET", "url", true);
+   (true = async, the default; false = sync, deprecated.)
+
+
+3. Why is asynchronous communication recommended?
+
+   - Keeps the UI responsive (no frozen browser).
+   - Allows parallel requests and loading indicators.
+   - Sync XHR on the main thread is deprecated.
